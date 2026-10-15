@@ -1,37 +1,88 @@
-import { ActivityIndicator, FlatList, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
+import { CategoryChips } from '../components/CategoryChips';
 import { ProductCard } from '../components/ProductCard';
-import { useProducts } from '../hooks/useProducts';
+import { SearchBar } from '../components/SearchBar';
+import { EmptyView, ErrorView, LoadingView } from '../components/StateView';
+import { useDebounce } from '../hooks/useDebounce';
+import { useCategories, useProducts } from '../hooks/useProducts';
 
 export function ProductListScreen() {
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState<string | null>(null);
+
+  const debouncedSearch = useDebounce(search.trim());
+  const query = category ? '' : debouncedSearch;
+
+  const { data: categories } = useCategories();
   const {
     data,
+    isLoading,
+    isError,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     isRefetching,
     refetch,
-  } = useProducts('', null);
+  } = useProducts(query, category);
+
+  const handleSearch = (text: string) => {
+    setSearch(text);
+    if (category) setCategory(null);
+  };
+
+  const handleSelectCategory = (slug: string | null) => {
+    setCategory(slug);
+    setSearch('');
+  };
 
   const products = data?.pages.flatMap((page) => page.products) ?? [];
 
+  let content;
+  if (isLoading) {
+    content = <LoadingView />;
+  } else if (isError && !data) {
+    content = <ErrorView onRetry={refetch} />;
+  } else {
+    content = (
+      <FlatList
+        data={products}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={({ item }) => <ProductCard product={item} onPress={() => {}} />}
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+        }}
+        onEndReachedThreshold={0.5}
+        refreshing={isRefetching && !isFetchingNextPage}
+        onRefresh={refetch}
+        contentContainerStyle={products.length === 0 ? styles.emptyContainer : undefined}
+        ListEmptyComponent={
+          <EmptyView
+            message={query ? `No hay resultados para "${query}"` : 'No se encontraron productos'}
+          />
+        }
+        ListFooterComponent={
+          isFetchingNextPage ? <ActivityIndicator style={styles.footer} /> : null
+        }
+      />
+    );
+  }
+
   return (
-    <FlatList
-      data={products}
-      keyExtractor={(item) => String(item.id)}
-      renderItem={({ item }) => <ProductCard product={item} onPress={() => {}} />}
-      onEndReached={() => {
-        if (hasNextPage && !isFetchingNextPage) fetchNextPage();
-      }}
-      onEndReachedThreshold={0.5}
-      refreshing={isRefetching && !isFetchingNextPage}
-      onRefresh={refetch}
-      ListFooterComponent={
-        isFetchingNextPage ? <ActivityIndicator style={styles.footer} /> : null
-      }
-    />
+    <View style={styles.container}>
+      <SearchBar value={search} onChangeText={handleSearch} />
+      <CategoryChips
+        categories={categories ?? []}
+        selected={category}
+        onSelect={handleSelectCategory}
+      />
+      {content}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: { flex: 1 },
   footer: { marginVertical: 16 },
+  emptyContainer: { flexGrow: 1 },
 });
