@@ -24,7 +24,7 @@ export function ProductCard({ product, onPress }: Props) {
         </Text>
         <Text style={[styles.price, { color: colors.price }]}>${product.price.toFixed(2)}</Text>
         <Text style={[styles.rating, { color: colors.textSecondary }]}>
-          ⭐ {product.rating.toFixed(1)}
+          🌟 {product.rating.toFixed(1)}
         </Text>
       </View>
     </Pressable>
