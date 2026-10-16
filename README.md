@@ -65,5 +65,18 @@ Las dependencias van en un solo sentido: `screens → components, hooks, store �
 - Caché persistente de las consultas para que el catálogo se vea sin conexión.
 - Accesibilidad (etiquetas para lectores de pantalla) y generar un APK instalable.
 
+## Pruebas
+
+```bash
+npm test
+```
+
+Se usa Jest con el preset `jest-expo` y React Native Testing Library.
+
+- **Store de favoritos** (`src/store/favorites.test.ts`): agregar, quitar y manejar varios productos. Se probó primero porque concentra la lógica de estado global.
+
+![alt text](image.png)
+
+
 ## Demo de presentación
 
