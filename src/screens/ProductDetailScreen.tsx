@@ -25,7 +25,7 @@ export function ProductDetailScreen({ route }: Props) {
       <View style={styles.body}>
         <Text style={[styles.title, { color: colors.text }]}>{product.title}</Text>
         <Text style={[styles.price, { color: colors.price }]}>{`$${product.price.toFixed(2)}`}</Text>
-        <Text style={[styles.meta, { color: colors.textSecondary }]}>{`⭐ ${product.rating.toFixed(1)}   ·   Stock: ${product.stock}`}</Text>
+        <Text style={[styles.meta, { color: colors.textSecondary }]}>{`⭐ ${product.rating.toFixed(1)}   -   Stock: ${product.stock}`}</Text>
         <FavoriteButton product={product} />
         <Text style={[styles.description, { color: colors.text }]}>{product.description}</Text>
       </View>

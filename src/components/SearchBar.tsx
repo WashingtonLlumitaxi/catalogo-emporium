@@ -19,6 +19,7 @@ export function SearchBar({ value, onChangeText }: Props) {
         value={value}
         onChangeText={onChangeText}
         placeholder="Buscar productos"
+        placeholderTextColor={colors.placeholder}
         autoCorrect={false}
         returnKeyType="search"
       />
