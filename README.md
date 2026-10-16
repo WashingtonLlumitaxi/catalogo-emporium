@@ -80,3 +80,7 @@ Se usa Jest con el preset `jest-expo` y React Native Testing Library.
 
 ## Demo de presentación
 
+- Enlace del video
+
+https://drive.google.com/file/d/1s-aBIq-h5pHWSddYsxHk5-UY1HLFimdV/view?usp=drive_link
+
