@@ -1,4 +1,5 @@
 import { StyleSheet, TextInput, View } from 'react-native';
+import { useTheme } from '../hooks/useTheme';
 
 interface Props {
   value: string;
@@ -6,10 +7,15 @@ interface Props {
 }
 
 export function SearchBar({ value, onChangeText }: Props) {
-  return (
+    const { colors } = useTheme();
+
+    return (
     <View style={styles.container}>
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          { backgroundColor: colors.card, borderColor: colors.border, color: colors.text },
+        ]}
         value={value}
         onChangeText={onChangeText}
         placeholder="Buscar productos"
@@ -23,12 +29,10 @@ export function SearchBar({ value, onChangeText }: Props) {
 const styles = StyleSheet.create({
   container: { paddingHorizontal: 16, paddingTop: 12 },
   input: {
-    backgroundColor: '#fff',
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 10,
     fontSize: 16,
     borderWidth: 1,
-    borderColor: '#ddd',
   },
 });

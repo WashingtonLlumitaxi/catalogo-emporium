@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Animated, Pressable, StyleSheet, Text } from 'react-native';
+import { useTheme } from '../hooks/useTheme';
 import { useFavorites } from '../store/favorites';
 import { Product } from '../types/product';
 
@@ -8,9 +9,11 @@ interface Props {
 }
 
 export function FavoriteButton({ product }: Props) {
+  const { colors } = useTheme();
   const isFavorite = useFavorites((state) => state.favorites.some((p) => p.id === product.id));
   const toggleFavorite = useFavorites((state) => state.toggleFavorite);
- const [scale] = useState(() => new Animated.Value(1));
+  const [scale] = useState(() => new Animated.Value(1));
+
   const handlePress = () => {
     toggleFavorite(product);
     Animated.sequence([
@@ -21,8 +24,15 @@ export function FavoriteButton({ product }: Props) {
 
   return (
     <Animated.View style={{ transform: [{ scale }] }}>
-      <Pressable style={[styles.button, isFavorite && styles.buttonActive]} onPress={handlePress}>
-        <Text style={[styles.text, isFavorite && styles.textActive]}>
+      <Pressable
+        style={[
+          styles.button,
+          { borderColor: colors.primary },
+          isFavorite && { backgroundColor: colors.primary },
+        ]}
+        onPress={handlePress}
+      >
+        <Text style={[styles.text, { color: isFavorite ? colors.onPrimary : colors.primary }]}>
           {isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
         </Text>
       </Pressable>
@@ -36,10 +46,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#1565c0',
     alignItems: 'center',
   },
-  buttonActive: { backgroundColor: '#1565c0' },
-  text: { color: '#1565c0', fontWeight: '600', fontSize: 16 },
-  textActive: { color: '#fff' },
+  text: { fontWeight: '600', fontSize: 16 },
 });

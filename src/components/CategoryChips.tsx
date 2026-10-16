@@ -1,4 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
+import { useTheme } from '../hooks/useTheme';
 import { Category } from '../types/product';
 
 interface Props {
@@ -35,9 +36,22 @@ interface ChipProps {
 }
 
 function Chip({ label, active, onPress }: ChipProps) {
+  const { colors } = useTheme();
+
   return (
-    <Pressable style={[styles.chip, active && styles.chipActive]} onPress={onPress}>
-      <Text style={[styles.chipText, active && styles.chipTextActive]}>{label}</Text>
+    <Pressable
+      style={[styles.chip, { backgroundColor: active ? colors.primary : colors.chip }]}
+      onPress={onPress}
+    >
+      <Text
+        style={[
+          styles.chipText,
+          { color: active ? colors.onPrimary : colors.chipText },
+          active && styles.chipTextActive,
+        ]}
+      >
+        {label}
+      </Text>
     </Pressable>
   );
 }
@@ -45,13 +59,7 @@ function Chip({ label, active, onPress }: ChipProps) {
 const styles = StyleSheet.create({
   scroll: { flexGrow: 0, flexShrink: 0 },
   content: { paddingHorizontal: 16, paddingVertical: 10, gap: 8 },
-  chip: {
-    backgroundColor: '#e0e0e0',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
-  },
-  chipActive: { backgroundColor: '#1565c0' },
-  chipText: { color: '#333' },
-  chipTextActive: { color: '#fff', fontWeight: '600' },
+  chip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20 },
+  chipText: {},
+  chipTextActive: { fontWeight: '600' },
 });

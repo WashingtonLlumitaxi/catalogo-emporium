@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTheme } from '../hooks/useTheme';
 import { Product } from '../types/product';
 
 interface Props {
@@ -8,15 +9,23 @@ interface Props {
 }
 
 export function ProductCard({ product, onPress }: Props) {
+  const { colors } = useTheme();
+
   return (
-    <Pressable style={styles.card} onPress={onPress}>
-      <Image source={{ uri: product.thumbnail }} style={styles.image} contentFit="cover" />
+    <Pressable style={[styles.card, { backgroundColor: colors.card }]} onPress={onPress}>
+      <Image
+        source={{ uri: product.thumbnail }}
+        style={[styles.image, { backgroundColor: colors.imagePlaceholder }]}
+        contentFit="cover"
+      />
       <View style={styles.info}>
-        <Text style={styles.title} numberOfLines={2}>
+        <Text style={[styles.title, { color: colors.text }]} numberOfLines={2}>
           {product.title}
         </Text>
-        <Text style={styles.price}>${product.price.toFixed(2)}</Text>
-        <Text style={styles.rating}>⭐ {product.rating.toFixed(1)}</Text>
+        <Text style={[styles.price, { color: colors.price }]}>${product.price.toFixed(2)}</Text>
+        <Text style={[styles.rating, { color: colors.textSecondary }]}>
+          ⭐ {product.rating.toFixed(1)}
+        </Text>
       </View>
     </Pressable>
   );
@@ -25,16 +34,15 @@ export function ProductCard({ product, onPress }: Props) {
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 12,
     marginHorizontal: 16,
     marginVertical: 6,
     elevation: 2,
   },
-  image: { width: 80, height: 80, borderRadius: 8, backgroundColor: '#eee' },
+  image: { width: 80, height: 80, borderRadius: 8 },
   info: { flex: 1, marginLeft: 12, justifyContent: 'center' },
   title: { fontSize: 16, fontWeight: '600' },
-  price: { fontSize: 15, color: '#2e7d32', marginTop: 4 },
-  rating: { fontSize: 13, color: '#555', marginTop: 2 },
+  price: { fontSize: 15, marginTop: 4 },
+  rating: { fontSize: 13, marginTop: 2 },
 });
