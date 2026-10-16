@@ -59,7 +59,7 @@ Las dependencias van en un solo sentido: `screens → components, hooks, store �
 
 ## Qué mejoraría con más tiempo
 
-- Pruebas unitarias del store de favoritos y de los componentes principales.
+- Pruebas unitarias de loscomponentes principales.
 - Skeleton loaders en lugar del indicador de carga.
 - Combinar búsqueda y categoría filtrando del lado del cliente.
 - Caché persistente de las consultas para que el catálogo se vea sin conexión.
